@@ -1,3 +1,38 @@
 [
-  { "id": "ld-default", "label": "Lieliska dāvana — default", "file": "ld-default.html" }
+  {
+    "id": "ld-default",
+    "label": "Lieliska dāvana — default",
+    "file": "ld-default.html",
+    "placeholders": {
+      "name":          "Name Surname",
+      "jobTitleLocal": "Job title in local language",
+      "jobTitleEng":   "Job title in English language",
+      "phone":         "+371 123 12 123",
+      "email":         "name@lieliskadavana.lv"
+    }
+  },
+  {
+    "id": "gd-default",
+    "label": "Gera dovana — default",
+    "file": "gd-default.html",
+    "placeholders": {
+      "name":          "Name Surname",
+      "jobTitleLocal": "Job title in local language",
+      "jobTitleEng":   "Job title in English language",
+      "phone":         "+370 123 12 123",
+      "email":         "name@geradovana.lt"
+    }
+  },
+  {
+    "id": "sp-default",
+    "label": "Super Prezenty — default",
+    "file": "sp-default.html",
+    "placeholders": {
+      "name":          "Name Surname",
+      "jobTitleLocal": "Job title in local language",
+      "jobTitleEng":   "Job title in English language",
+      "phone":         "+48 123 12 123",
+      "email":         "name@superprezenty.pl"
+    }
+  }
 ]

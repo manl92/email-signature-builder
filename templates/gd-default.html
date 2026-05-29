@@ -1,5 +1,5 @@
 <!--
-  LD default signature template.
+  Gera dovana — default signature template (Lithuanian).
   Rules: see /docs/RULES.md — nested tables only, every style inline,
   absolute https image URLs, PNG/JPG only, forced link colors.
 
@@ -10,6 +10,8 @@
 
   data-show-if="token"         — row removed when that token is blank
   data-show-if-any="a,b"       — row removed when ALL listed tokens are blank
+
+  TODO: update company address, website URL and disclaimer text below.
 -->
 <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="520" bgcolor="#ffffff" style="width:520px; background-color:#ffffff; font-family:Arial, Helvetica, sans-serif;">
   <tr>
@@ -26,8 +28,9 @@
           <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;">{{jobTitleEng}}</td>
         </tr>
         <tr data-show-if="phone">
-          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;">Tālr. {{phone}}</td>
+          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;">Tel. {{phone}}</td>
         </tr>
+
         <tr data-show-if="email">
           <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;"><a href="mailto:{{email}}" style="color:#333333; text-decoration:none;">{{email}}</a></td>
         </tr>
@@ -35,13 +38,13 @@
           <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:8px; line-height:8px; height:8px;">&nbsp;</td>
         </tr>
         <tr>
-          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333;">SIA &#8222;Lieliska d&#257;vana&#8220;</td>
+          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333;">UAB &#8222;Gera dovana&#8220;</td>
         </tr>
         <tr>
-          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333;">B&#275;rzaunes iela 7, R&#299;ga</td>
+          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333;">J. Jasinskio g. 16A, Vilnius</td>
         </tr>
         <tr>
-          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px;"><a href="https://www.lieliskadavana.lv" style="color:#E8731C; text-decoration:underline;">www.lieliskadavana.lv</a></td>
+          <td bgcolor="#ffffff" style="background-color:#ffffff; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px;"><a href="https://www.geradovana.lt" style="color:#E8731C; text-decoration:underline;">www.geradovana.lt</a></td>
         </tr>
       </table>
     </td>
@@ -50,22 +53,23 @@
     <td width="24" bgcolor="#ffffff" style="width:24px; background-color:#ffffff; font-size:0; line-height:0;">&nbsp;</td>
 
     <!-- RIGHT COLUMN: logo + social icons -->
-    <!-- Logo source: 400×254 px (2× export) → displayed at 170×108 px -->
+    <!-- Logo source: 401×295 px (2× export) → displayed at 150×110 px -->
     <!-- Social icons source: 65×64 px (2× export) → displayed at 40×40 px -->
+    <!-- Social order: Facebook, LinkedIn, Instagram (per reference design) -->
     <td valign="top" align="center" bgcolor="#ffffff" style="padding:0; background-color:#ffffff;">
       <table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#ffffff" style="background-color:#ffffff;">
         <tr>
           <td align="center" bgcolor="#ffffff" style="padding:0 0 20px 0; background-color:#ffffff;">
-            <img src="{{assetBase}}/assets/ld-logo.png" width="150" height="95" alt="Lieliska d&#257;vana" style="display:block; border:0;" />
+            <img src="{{assetBase}}/assets/gd-logo.png" width="150" height="110" alt="Gera dovana" style="display:block; border:0;" />
           </td>
         </tr>
         <tr>
           <td align="center" bgcolor="#ffffff" style="padding:0; background-color:#ffffff;">
             <table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#ffffff" style="background-color:#ffffff;">
               <tr>
-                <td bgcolor="#ffffff" style="padding:0 10px; background-color:#ffffff;"><a href="https://www.facebook.com/LieliskaDavana" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-facebook.png" width="40" height="40" alt="Facebook" style="display:block; border:0;" /></a></td>
-                <td bgcolor="#ffffff" style="padding:0 10px; background-color:#ffffff;"><a href="https://www.instagram.com/lieliskadavana/" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-instagram.png" width="40" height="40" alt="Instagram" style="display:block; border:0;" /></a></td>
-                <td bgcolor="#ffffff" style="padding:0 10px; background-color:#ffffff;"><a href="https://www.linkedin.com/company/sia-lieliska-d-vana-" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-linkedin.png" width="40" height="40" alt="LinkedIn" style="display:block; border:0;" /></a></td>
+                <td bgcolor="#ffffff" style="padding:0 10px; background-color:#ffffff;"><a href="https://www.facebook.com/GeraDovana.lt" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-facebook.png" width="40" height="40" alt="Facebook" style="display:block; border:0;" /></a></td>
+                <td bgcolor="#ffffff" style="padding:0 10px; background-color:#ffffff;"><a href="https://www.linkedin.com/company/uab-gera-dovana-" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-linkedin.png" width="40" height="40" alt="LinkedIn" style="display:block; border:0;" /></a></td>
+                <td bgcolor="#ffffff" style="padding:0 10px; background-color:#ffffff;"><a href="https://www.instagram.com/gera_dovana/" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-instagram.png" width="40" height="40" alt="Instagram" style="display:block; border:0;" /></a></td>
               </tr>
             </table>
           </td>
@@ -82,7 +86,7 @@
           <td bgcolor="#ffffff" style="background-color:#ffffff; border-top:1px solid #dddddd; font-size:0; line-height:0; height:1px;">&nbsp;</td>
         </tr>
         <tr>
-          <td bgcolor="#ffffff" style="background-color:#ffffff; padding:8px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:10px; line-height:14px; color:#999999; font-style:italic;">The content of this email, including all attachments, is confidential. If you are not the intended recipient of &quot;Lieliska d&#257;vana&quot;, please notify us immediately and delete this email. Any disclosure, copying, distribution or any other use of its content is strictly prohibited.</td>
+          <td bgcolor="#ffffff" style="background-color:#ffffff; padding:8px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:10px; line-height:14px; color:#999999; font-style:italic;">The content of this email, including all attachments, is confidential. If you are not the intended recipient of &quot;Gera dovana&quot;, please notify us immediately and delete this email. Any disclosure, copying, distribution or any other use of its content is strictly prohibited.</td>
         </tr>
       </table>
     </td>

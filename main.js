@@ -71,8 +71,9 @@ function render(templateText, data) {
   );
 
   const replacements = {
-    assetBase: resolveAssetBase(),
-    titleSep: data.jobTitleLocal && data.jobTitleEng ? ' / ' : '',
+    assetBase:   resolveAssetBase(),
+    titleSep:    data.jobTitleLocal && data.jobTitleEng ? ' / ' : '',
+    slashSuffix: data.jobTitleLocal && data.jobTitleEng ? ' /' : '',
   };
   FIELD_IDS.forEach((id) => (replacements[id] = escapeHtml(data[id])));
 
@@ -133,8 +134,18 @@ async function loadTemplate(entry) {
   return text;
 }
 
+function applyPlaceholders(entry) {
+  if (!entry.placeholders) return;
+  FIELD_IDS.forEach((id) => {
+    if (entry.placeholders[id] !== undefined) {
+      els[id].placeholder = entry.placeholders[id];
+    }
+  });
+}
+
 async function selectTemplate(entry) {
   try {
+    applyPlaceholders(entry);
     currentTemplateText = await loadTemplate(entry);
     updatePreview();
   } catch (err) {
