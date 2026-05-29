@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Signature Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles-design.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <header class="app__head">
+      <p class="app__eyebrow">Internal tool</p>
+      <h1 class="app__title">Signature<br>Builder</h1>
+    </header>
+
+    <!-- Template thumbnails — populated by JS -->
+    <div id="thumbRow" class="thumbs"></div>
+
+    <!-- Editable signature preview -->
+    <div class="stage">
+      <div class="sig-card">
+        <div id="preview" class="sig-card__body"></div>
+
+        <!-- Skeleton shown while template loads -->
+        <div id="skeleton" class="skeleton" aria-hidden="true">
+          <div class="sk-line" style="width:38%"></div>
+          <div class="sk-line" style="width:55%"></div>
+          <div class="sk-line" style="width:44%"></div>
+          <div class="sk-line sk-line--gap" style="width:60%"></div>
+          <div class="sk-line" style="width:48%"></div>
+        </div>
+      </div>
+      <p class="edit-hint" id="editHint">Click any text field above to edit</p>
+    </div>
+
+    <!-- Action row -->
+    <div class="actions" id="actionsRow">
+      <button id="copyBtn" class="btn" type="button" data-state="idle">
+        <span class="btn__text btn__text--idle">Copy signature</span>
+        <span class="btn__text btn__text--error" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="6.5" cy="6.5" r="5.25" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="6.5" y1="3.5" x2="6.5" y2="6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            <circle cx="6.5" cy="8.75" r="0.8" fill="currentColor"/>
+          </svg>
+          Fill in all fields
+        </span>
+        <span class="btn__text btn__text--done" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 6.5L5 9.5L11 3.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Copied
+        </span>
+      </button>
+      <div class="actions__text">
+        <span class="actions__hint">Paste in Outlook → File → Options → Mail → Signatures</span>
+        <span class="actions__error">Please fill in the highlighted fields.</span>
+      </div>
+    </div>
+
+    <!-- Manual fallback -->
+    <div id="manualFallback" class="manual" hidden>
+      <p class="manual__msg">Select all and copy from the box below:</p>
+      <div id="manualStage" class="sig-card sig-card--manual"></div>
+    </div>
+
+    <!-- How-to guide -->
+    <section class="guide">
+      <h2 class="guide__title">Getting started</h2>
+      <ol class="guide__steps">
+
+        <li class="guide__step">
+          <span class="guide__num">1</span>
+          <div class="guide__body">
+            <strong class="guide__step-title">Choose your company template</strong>
+            <p class="guide__step-desc">Click a logo card at the top. Each brand has its own layout, logo, and social links already set up.</p>
+          </div>
+        </li>
+
+        <li class="guide__step">
+          <span class="guide__num">2</span>
+          <div class="guide__body">
+            <strong class="guide__step-title">Fill in your details</strong>
+            <p class="guide__step-desc">Click directly on any underlined text in the signature preview to edit it: name, job title, phone, and email. Use <kbd>Tab</kbd> to jump between fields.</p>
+          </div>
+        </li>
+
+        <li class="guide__step">
+          <span class="guide__num">3</span>
+          <div class="guide__body">
+            <strong class="guide__step-title">Copy the signature</strong>
+            <p class="guide__step-desc">Click <strong>Copy signature</strong>. The formatted HTML signature is copied to your clipboard, ready to paste.</p>
+          </div>
+        </li>
+
+        <li class="guide__step">
+          <span class="guide__num">4</span>
+          <div class="guide__body">
+            <strong class="guide__step-title">Add to Outlook</strong>
+            <p class="guide__step-desc">In Outlook, go to <strong>File → Options → Mail → Signatures → New</strong>. Give it a name, click into the editor, and paste (<kbd>Ctrl+V</kbd> or <kbd>⌘V</kbd>).</p>
+            <p class="guide__step-note">Also works in Gmail: Settings → See all settings → General → Signature → Create new.</p>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+  </div>
+
+  <script type="module" src="./main-design.js"></script>
+</body>
+</html>

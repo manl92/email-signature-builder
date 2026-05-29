@@ -1,0 +1,630 @@
+/* ─── Design tokens ──────────────────────────────────────────────────────── */
+:root {
+  --bg:             #edeae4;
+  --surface:        #ffffff;
+  --border:         #e4e3e0;
+  --border-focus:   #e8731c;
+  --text:           #1a1916;
+  --text-secondary: #6b6560;
+  --text-muted:     #6d6a63;   /* ≥4.5:1 on --bg; was #a09b96 (failed) */
+  --accent:         #e8731c;
+  --accent-hover:   #d4661a;
+  --accent-glow:    rgba(232, 115, 28, 0.18);
+  --error:          #dc2626;
+  --error-glow:     rgba(220, 38, 38, 0.12);
+  --error-text:     #b00020;   /* error prose on white surface */
+  --border-hover:   #cac8c4;   /* interactive border on hover */
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  /* 4pt spacing scale */
+  --space-2xs: 4px;
+  --space-xs:  8px;
+  --space-sm:  12px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  --shadow-card:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 4px 8px  rgba(0, 0, 0, 0.04),
+    0 20px 60px rgba(0, 0, 0, 0.10);
+
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* ─── Reset & base ───────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, rgba(150, 145, 138, 0.38) 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: var(--text);
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+/* ─── App shell ──────────────────────────────────────────────────────────── */
+.app {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-xl) var(--space-3xl);
+  display: flex;
+  flex-direction: column;
+  /* Spacing is set per-section below for rhythm, not a uniform gap */
+}
+
+/* Vertical rhythm: generous after the title, tight within the
+   pick -> preview -> copy task flow, a clear break before the guide */
+.thumbs  { margin-top: var(--space-2xl); }
+.stage   { margin-top: var(--space-lg); }
+.actions { margin-top: var(--space-lg); }
+.manual:not([hidden]) { margin-top: var(--space-lg); }
+.guide   { margin-top: var(--space-2xl); }
+
+/* ─── App header ─────────────────────────────────────────────────────────── */
+.app__head {
+  animation: fadeUp 500ms var(--ease-out) both;
+}
+
+.app__eyebrow {
+  margin: 0 0 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.9px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.app__title {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.8px;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+/* ─── Template thumbnails ────────────────────────────────────────────────── */
+/* auto-fill grid — scales cleanly from 3 to 20+ items */
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 140px);
+  justify-content: start;
+  gap: var(--space-sm);
+  animation: fadeUp 500ms var(--ease-out) 50ms both;
+}
+
+.thumb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-sm) 10px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    border-color 150ms var(--ease-out),
+    box-shadow   150ms var(--ease-out),
+    transform    140ms var(--ease-out);
+
+  /* Staggered entrance */
+  opacity: 0;
+  animation: fieldEnter 400ms var(--ease-out) forwards;
+  animation-delay: calc(80ms + var(--i, 0) * 60ms);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .thumb:hover:not(.thumb--active) {
+    border-color: var(--border-hover);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.thumb:active { transform: scale(0.97); }
+
+.thumb:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.thumb--active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.thumb__logo-wrap {
+  width: 78px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb__logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.thumb__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: color 150ms;
+}
+
+.thumb--active .thumb__label { color: var(--accent); }
+
+/* ─── Signature stage ────────────────────────────────────────────────────── */
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  animation: fadeUp 600ms var(--ease-out) 90ms both;
+}
+
+/* ─── Signature card ─────────────────────────────────────────────────────── */
+.sig-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 28px 32px;
+  overflow-x: auto;
+}
+
+.sig-card--manual {
+  border: 1.5px solid var(--border);
+  box-shadow: none;
+}
+
+.sig-card__body .preview-error {
+  color: var(--error-text);
+  font-size: 13px;
+  margin: 0;
+}
+
+/* ─── Editable field zones ───────────────────────────────────────────────── */
+
+/* Wrapper — gives us a hover target that covers both text and icon */
+.fz-wrap {
+  display: inline;
+}
+
+/* The contenteditable span itself */
+.fz {
+  outline: none;
+  cursor: text;
+  border-radius: 2px;
+  /* Dotted underline: the universal "editable" signal */
+  text-decoration: underline dotted rgba(232, 115, 28, 0.4);
+  text-underline-offset: 3px;
+  transition: background 120ms var(--ease-out);
+}
+
+/* Ghost placeholder when empty */
+.fz:empty::before {
+  content: attr(data-placeholder);
+  color: var(--text-muted);
+  pointer-events: none;
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fz-wrap:hover .fz {
+    background: rgba(232, 115, 28, 0.07);
+  }
+}
+
+.fz-wrap:focus-within .fz {
+  background: rgba(232, 115, 28, 0.10);
+  text-decoration: underline solid rgba(232, 115, 28, 0.65);
+}
+
+/* Error state */
+.fz--error {
+  background: rgba(220, 38, 38, 0.09) !important;
+  text-decoration: underline solid rgba(220, 38, 38, 0.5) !important;
+  animation: fieldShake 320ms var(--ease-out);
+}
+
+/* Pencil icon — shown on hover/focus via parent */
+.fz-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  margin-left: 3px;
+  color: var(--accent);
+  opacity: 0;
+  cursor: text;
+  transition: opacity 120ms var(--ease-out);
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fz-wrap:hover .fz-icon {
+    opacity: 0.65;
+  }
+}
+
+.fz-wrap:focus-within .fz-icon {
+  opacity: 0.9;
+}
+
+/* ─── Edit hint ──────────────────────────────────────────────────────────── */
+.edit-hint {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  transition: opacity 400ms var(--ease-out);
+}
+
+.edit-hint--faded { opacity: 0; }
+
+/* ─── Skeleton loader ────────────────────────────────────────────────────── */
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 2px 0;
+}
+
+.skeleton[hidden] { display: none; }
+
+.sk-line {
+  height: 13px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--border) 0%,
+    #f4f2ee 45%,
+    var(--border) 90%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s var(--ease-in-out) infinite;
+}
+
+.sk-line--gap { margin-top: var(--space-xs); }
+
+/* ─── Action row ─────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  animation: fadeUp 600ms var(--ease-out) 120ms both;
+}
+
+.actions__text {
+  position: relative;
+}
+
+.actions__hint {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+/* Error text sits on top of hint, crossfades in */
+.actions__error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--error);
+  line-height: 1.45;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(3px);
+  pointer-events: none;
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.actions--error .actions__hint {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
+.actions--error .actions__error {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Copy button ────────────────────────────────────────────────────────── */
+.btn {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 10px 22px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background 200ms var(--ease-out),
+    box-shadow  200ms var(--ease-out),
+    transform   160ms var(--ease-out);
+  user-select: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 4px 18px var(--accent-glow);
+  }
+}
+
+/* Press feedback — the button heard you */
+.btn:active { transform: scale(0.97); }
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px var(--accent-glow);
+}
+
+/* Blur-morph between idle / error / copied states */
+.btn__text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition:
+    opacity   160ms ease,
+    filter    160ms ease,
+    transform 160ms ease;
+  white-space: nowrap;
+}
+
+.btn__text--error,
+.btn__text--done {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(6px);
+}
+
+/* Error state — button turns red */
+.btn[data-state="error"] {
+  background: var(--error);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn[data-state="error"]:hover {
+    background: var(--error);
+    box-shadow: 0 4px 18px rgba(220, 38, 38, 0.25);
+  }
+}
+
+.btn[data-state="error"] .btn__text--idle {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(-6px);
+}
+
+.btn[data-state="error"] .btn__text--error {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* Copied state */
+.btn[data-state="copied"] .btn__text--idle {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(-6px);
+}
+
+.btn[data-state="copied"] .btn__text--done {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+/* ─── Manual fallback ────────────────────────────────────────────────────── */
+.manual[hidden] { display: none; }
+.manual         { display: block; }
+
+.manual__msg {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ─── How-to guide ───────────────────────────────────────────────────────── */
+.guide {
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-xl);
+  animation: fadeUp 600ms var(--ease-out) 150ms both;
+}
+
+.guide__title {
+  margin: 0 0 22px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.guide__steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.guide__step {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.guide__num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.guide__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.guide__step-title {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.guide__step-desc {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.guide__step-note {
+  margin: var(--space-2xs) 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Keyboard key styling */
+kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: inherit;
+  font-weight: 600;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fieldEnter {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fieldShake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-4px); }
+  35%       { transform: translateX(3px); }
+  55%       { transform: translateX(-2px); }
+  75%       { transform: translateX(2px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app {
+    padding: var(--space-xl) var(--space-md) var(--space-2xl);
+  }
+
+  /* Tighter rhythm on small screens, same proportions */
+  .thumbs  { margin-top: var(--space-xl); }
+  .stage   { margin-top: var(--space-md); }
+  .actions { margin-top: var(--space-md); }
+  .guide   { margin-top: var(--space-xl); }
+
+  .app__title { font-size: 30px; }
+
+  .thumbs {
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: var(--space-xs);
+  }
+
+  .sig-card { padding: 20px 18px; }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .app__head,
+  .thumbs,
+  .thumb,
+  .stage,
+  .actions,
+  .guide {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .sk-line {
+    animation: none;
+    background: var(--border);
+  }
+
+  .btn,
+  .btn__text,
+  .thumb,
+  .fz,
+  .fz-icon {
+    transition: none;
+  }
+}
