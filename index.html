@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Signature Builder</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>Email Signature Builder</h1>
+      <p class="app__sub">Fill in your details, pick a template, then copy your signature into your mail client.</p>
+    </header>
+
+    <div class="layout">
+      <!-- FORM -->
+      <section class="panel form" aria-label="Your details">
+        <label class="field">
+          <span class="field__label">Template</span>
+          <select id="template" class="field__input"></select>
+        </label>
+
+        <label class="field">
+          <span class="field__label">Name Surname <span class="req">*</span></span>
+          <input id="name" class="field__input" type="text" autocomplete="off" placeholder="Jānis Bērziņš" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Job title (local)</span>
+          <input id="jobTitleLocal" class="field__input" type="text" autocomplete="off" placeholder="Pārdošanas vadītājs" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Job title (English)</span>
+          <input id="jobTitleEng" class="field__input" type="text" autocomplete="off" placeholder="Sales Manager" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Phone</span>
+          <input id="phone" class="field__input" type="text" autocomplete="off" placeholder="+371 20000000" />
+        </label>
+
+        <label class="field">
+          <span class="field__label">Email</span>
+          <input id="email" class="field__input" type="text" autocomplete="off" placeholder="janis@lieliskadavana.lv" />
+        </label>
+      </section>
+
+      <!-- PREVIEW -->
+      <section class="panel preview" aria-label="Live preview">
+        <div class="preview__bar">
+          <h2 class="preview__title">Live preview</h2>
+          <div class="preview__actions">
+            <button id="copyBtn" class="btn" type="button">Copy signature</button>
+            <span id="copyStatus" class="copy-status" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <p class="hint">Paste into Outlook → File → Options → Mail → Signatures (or your mail client's signature settings).</p>
+
+        <div id="preview" class="preview__stage"></div>
+
+        <!-- Manual fallback: shown only if automatic copy is unavailable -->
+        <div id="manualFallback" class="manual" hidden>
+          <p class="manual__msg">Automatic copy isn't available in this browser. Click inside the box below, select all (Ctrl/Cmd+A), and copy (Ctrl/Cmd+C):</p>
+          <div id="manualStage" class="preview__stage manual__stage"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

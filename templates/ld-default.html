@@ -1,0 +1,89 @@
+<!--
+  LD default signature template — the reference pattern for all future templates.
+  Authoring rules: see /docs/RULES.md (nested tables only, every style inline,
+  absolute https image URLs, PNG/JPG only, forced link colors).
+
+  Render-time tokens:
+    {{assetBase}}  -> configured absolute asset base URL (see /config.js)
+    {{name}} {{jobTitleLocal}} {{jobTitleEng}} {{phone}} {{email}}  -> form values
+    {{titleSep}}   -> " / " only when BOTH titles are present, otherwise ""
+
+  Empty-field collapsing:
+    data-show-if="token"            -> element removed if that token is blank
+    data-show-if-any="tokA,tokB"    -> element removed if ALL listed tokens blank
+
+  TODO(designer): replace the three social URLs (https://example.com/REPLACE)
+  with the real Facebook / Instagram / LinkedIn page URLs.
+-->
+<table cellpadding="0" cellspacing="0" border="0" role="presentation" width="520" style="width:520px; font-family:Arial, Helvetica, sans-serif;">
+  <tr>
+    <!-- LEFT COLUMN: stacked text lines -->
+    <td valign="top" style="padding:0; font-family:Arial, Helvetica, sans-serif;">
+      <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="font-family:Arial, Helvetica, sans-serif;">
+        <tr data-show-if="name">
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:20px; color:#333333; font-weight:bold; padding:0 0 2px 0;">{{name}}</td>
+        </tr>
+        <tr data-show-if-any="jobTitleLocal,jobTitleEng">
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;">{{jobTitleLocal}}{{titleSep}}{{jobTitleEng}}</td>
+        </tr>
+        <tr data-show-if="phone">
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;">Tālr. {{phone}}</td>
+        </tr>
+        <tr data-show-if="email">
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333; padding:0 0 2px 0;"><a href="mailto:{{email}}" style="color:#333333; text-decoration:none;">{{email}}</a></td>
+        </tr>
+        <tr>
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:8px; line-height:8px; height:8px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333;">SIA „Lieliska dāvana&#8220;</td>
+        </tr>
+        <tr>
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px; color:#333333;">Bērzaunes iela 7, Rīga</td>
+        </tr>
+        <tr>
+          <td style="font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:19px;"><a href="https://www.lieliskadavana.lv" style="color:#E8731C; text-decoration:underline;">www.lieliskadavana.lv</a></td>
+        </tr>
+      </table>
+    </td>
+
+    <!-- spacer between the two columns -->
+    <td width="24" style="width:24px; font-size:0; line-height:0;">&nbsp;</td>
+
+    <!-- RIGHT COLUMN: logo + social icons -->
+    <td valign="top" align="center" style="padding:0;">
+      <table cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tr>
+          <td align="center" style="padding:0 0 10px 0;">
+            <img src="{{assetBase}}/assets/ld-logo.png" width="120" height="120" alt="Lieliska dāvana" style="display:block; border:0;" />
+          </td>
+        </tr>
+        <tr>
+          <td align="center" style="padding:0;">
+            <table cellpadding="0" cellspacing="0" border="0" role="presentation">
+              <tr>
+                <td style="padding:0 4px;"><a href="https://example.com/REPLACE" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-facebook.png" width="24" height="24" alt="Facebook" style="display:block; border:0;" /></a></td>
+                <td style="padding:0 4px;"><a href="https://example.com/REPLACE" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-instagram.png" width="24" height="24" alt="Instagram" style="display:block; border:0;" /></a></td>
+                <td style="padding:0 4px;"><a href="https://example.com/REPLACE" style="text-decoration:none;"><img src="{{assetBase}}/assets/social-linkedin.png" width="24" height="24" alt="LinkedIn" style="display:block; border:0;" /></a></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- FULL-WIDTH: divider + confidentiality disclaimer -->
+  <tr>
+    <td colspan="3" style="padding:12px 0 0 0;">
+      <table cellpadding="0" cellspacing="0" border="0" role="presentation" width="520" style="width:520px;">
+        <tr>
+          <td style="border-top:1px solid #dddddd; font-size:0; line-height:0; height:1px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 0 0 0; font-family:Arial, Helvetica, sans-serif; font-size:10px; line-height:14px; color:#999999; font-style:italic;">The content of this email, including all attachments, is confidential. If you are not the intended recipient of &quot;Lieliska dāvana&quot;, please notify us immediately and delete this email. Any disclosure, copying, distribution or any other use of its content is strictly prohibited.</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
