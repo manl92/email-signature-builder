@@ -10,7 +10,7 @@
   <main class="app">
     <header class="app__header">
       <h1>Email Signature Builder</h1>
-      <p class="app__sub">Fill in your details, pick a template, then copy your signature into your mail client.</p>
+      <p class="app__sub">Fill in your details, pick a template, then copy your signature into your mail client. All fields are required.</p>
     </header>
 
     <div class="layout">
@@ -23,27 +23,32 @@
 
         <label class="field">
           <span class="field__label">Name Surname <span class="req">*</span></span>
-          <input id="name" class="field__input" type="text" autocomplete="off" placeholder="Jānis Bērziņš" />
+          <input id="name" class="field__input" type="text" autocomplete="off" placeholder="Jānis Bērziņš" required />
+          <span class="field__error" id="name-err"></span>
         </label>
 
         <label class="field">
-          <span class="field__label">Job title (local)</span>
-          <input id="jobTitleLocal" class="field__input" type="text" autocomplete="off" placeholder="Pārdošanas vadītājs" />
+          <span class="field__label">Job title (local) <span class="req">*</span></span>
+          <input id="jobTitleLocal" class="field__input" type="text" autocomplete="off" placeholder="Pārdošanas vadītājs" required />
+          <span class="field__error" id="jobTitleLocal-err"></span>
         </label>
 
         <label class="field">
-          <span class="field__label">Job title (English)</span>
-          <input id="jobTitleEng" class="field__input" type="text" autocomplete="off" placeholder="Sales Manager" />
+          <span class="field__label">Job title (English) <span class="req">*</span></span>
+          <input id="jobTitleEng" class="field__input" type="text" autocomplete="off" placeholder="Sales Manager" required />
+          <span class="field__error" id="jobTitleEng-err"></span>
         </label>
 
         <label class="field">
-          <span class="field__label">Phone</span>
-          <input id="phone" class="field__input" type="text" autocomplete="off" placeholder="+371 20000000" />
+          <span class="field__label">Phone <span class="req">*</span></span>
+          <input id="phone" class="field__input" type="text" autocomplete="off" placeholder="+371 20000000" required />
+          <span class="field__error" id="phone-err"></span>
         </label>
 
         <label class="field">
-          <span class="field__label">Email</span>
-          <input id="email" class="field__input" type="text" autocomplete="off" placeholder="janis@lieliskadavana.lv" />
+          <span class="field__label">Email <span class="req">*</span></span>
+          <input id="email" class="field__input" type="text" autocomplete="off" placeholder="janis@lieliskadavana.lv" required />
+          <span class="field__error" id="email-err"></span>
         </label>
       </section>
 

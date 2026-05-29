@@ -15,7 +15,6 @@ FIELD_IDS.forEach((id) => (els[id] = document.getElementById(id)));
 // Raw template HTML, keyed by template id, fetched lazily.
 const templateCache = new Map();
 let currentTemplateText = '';
-let lastRenderedHtml = '';
 
 // --- helpers -------------------------------------------------------------
 
@@ -27,32 +26,38 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;');
 }
 
-function readForm() {
+// Read form values. When previewMode=true, fall back to the input's
+// placeholder text so the preview always shows a full, complete signature.
+function readForm(previewMode = false) {
   const data = {};
-  FIELD_IDS.forEach((id) => (data[id] = els[id].value.trim()));
+  FIELD_IDS.forEach((id) => {
+    const el = els[id];
+    const val = el.value.trim();
+    data[id] = previewMode && !val ? el.placeholder : val;
+  });
   return data;
 }
 
-// Render a template string against form data.
-// 1) Build a DOM so we can drop rows for blank fields cleanly.
-// 2) Replace tokens with escaped values (assetBase/titleSep are computed).
+// Render a template string against a data object.
+// 1) Build a DOM to cleanly remove rows for blank fields.
+// 2) Strip authoring attributes/comments that shouldn't travel into emails.
+// 3) Replace {{tokens}} with escaped values.
 function render(templateText, data) {
   const host = document.createElement('div');
   host.innerHTML = templateText;
 
-  // Collapse single-token rows.
+  // Remove rows whose single token is blank.
   host.querySelectorAll('[data-show-if]').forEach((el) => {
-    const token = el.getAttribute('data-show-if');
-    if (!data[token]) el.remove();
+    if (!data[el.getAttribute('data-show-if')]) el.remove();
   });
-  // Collapse rows that depend on several tokens (drop only if ALL are blank).
+  // Remove rows where ALL listed tokens are blank.
   host.querySelectorAll('[data-show-if-any]').forEach((el) => {
     const tokens = el.getAttribute('data-show-if-any').split(',').map((t) => t.trim());
     if (tokens.every((t) => !data[t])) el.remove();
   });
 
-  // Strip our authoring-only attributes from the rows we kept so the copied
-  // signature carries no app-specific markup into recipients' inboxes.
+  // Strip helper attributes from kept elements — they must not appear in the
+  // pasted signature markup.
   host.querySelectorAll('[data-show-if], [data-show-if-any]').forEach((el) => {
     el.removeAttribute('data-show-if');
     el.removeAttribute('data-show-if-any');
@@ -60,7 +65,7 @@ function render(templateText, data) {
 
   let html = host.innerHTML;
 
-  // Remove authoring comments, but preserve Outlook/MSO conditional comments.
+  // Remove authoring comments but preserve Outlook MSO conditionals.
   html = html.replace(/<!--([\s\S]*?)-->/g, (m, inner) =>
     /\[if|endif/i.test(inner) ? m : ''
   );
@@ -71,17 +76,44 @@ function render(templateText, data) {
   };
   FIELD_IDS.forEach((id) => (replacements[id] = escapeHtml(data[id])));
 
-  html = html.replace(/\{\{(\w+)\}\}/g, (match, token) =>
-    Object.prototype.hasOwnProperty.call(replacements, token) ? replacements[token] : ''
-  );
-
-  return html.trim();
+  return html
+    .replace(/\{\{(\w+)\}\}/g, (match, token) =>
+      Object.prototype.hasOwnProperty.call(replacements, token) ? replacements[token] : ''
+    )
+    .trim();
 }
 
 function updatePreview() {
   if (!currentTemplateText) return;
-  lastRenderedHtml = render(currentTemplateText, readForm());
-  els.preview.innerHTML = lastRenderedHtml;
+  // Pass previewMode=true so empty fields fall back to their placeholder text.
+  const html = render(currentTemplateText, readForm(true));
+  els.preview.innerHTML = html;
+}
+
+// --- validation ----------------------------------------------------------
+
+function clearErrors() {
+  FIELD_IDS.forEach((id) => {
+    const input = els[id];
+    const errEl = document.getElementById(`${id}-err`);
+    input.classList.remove('field__input--error');
+    if (errEl) errEl.textContent = '';
+  });
+}
+
+// Returns true if all required fields are filled. Otherwise marks errors.
+function validateForm() {
+  clearErrors();
+  let valid = true;
+  FIELD_IDS.forEach((id) => {
+    if (!els[id].value.trim()) {
+      els[id].classList.add('field__input--error');
+      const errEl = document.getElementById(`${id}-err`);
+      if (errEl) errEl.textContent = 'Required';
+      valid = false;
+    }
+  });
+  return valid;
 }
 
 // --- template loading ----------------------------------------------------
@@ -118,19 +150,16 @@ function showCopied(message = 'Copied!') {
   showCopied._t = setTimeout(() => (els.copyStatus.textContent = ''), 2500);
 }
 
-// Plain-text rendition for the text/plain clipboard flavor.
+// Derive a plain-text fallback from what's currently visible in the preview.
 function plainTextSignature() {
-  const text = els.preview.innerText || '';
-  return text.replace(/\n{3,}/g, '\n\n').trim();
+  return (els.preview.innerText || '').replace(/\n{3,}/g, '\n\n').trim();
 }
 
 // Fallback copy via a temporary contenteditable + execCommand.
 function execCommandCopyHtml(html) {
   const holder = document.createElement('div');
   holder.setAttribute('contenteditable', 'true');
-  holder.style.position = 'fixed';
-  holder.style.left = '-9999px';
-  holder.style.top = '0';
+  Object.assign(holder.style, { position: 'fixed', left: '-9999px', top: '0' });
   holder.innerHTML = html;
   document.body.appendChild(holder);
 
@@ -141,25 +170,31 @@ function execCommandCopyHtml(html) {
   sel.addRange(range);
 
   let ok = false;
-  try {
-    ok = document.execCommand('copy');
-  } catch (_) {
-    ok = false;
-  }
+  try { ok = document.execCommand('copy'); } catch (_) {}
   sel.removeAllRanges();
   holder.remove();
   return ok;
 }
 
-function showManualFallback() {
-  els.manualStage.innerHTML = lastRenderedHtml;
+function showManualFallback(html) {
+  els.manualStage.innerHTML = html;
   els.manual.hidden = false;
   els.copyStatus.textContent = '';
 }
 
 async function copySignature() {
-  if (!lastRenderedHtml) return;
-  const html = lastRenderedHtml;
+  // Validate first — all fields required.
+  if (!validateForm()) {
+    // Scroll the form into view so the user sees the errors.
+    document.querySelector('.form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  clearErrors();
+
+  if (!currentTemplateText) return;
+
+  // Re-render with real values only (no placeholder fallback) for the actual copy.
+  const html = render(currentTemplateText, readForm(false));
   const text = plainTextSignature();
 
   if (navigator.clipboard && typeof window.ClipboardItem !== 'undefined') {
@@ -181,20 +216,29 @@ async function copySignature() {
     return;
   }
 
-  showManualFallback();
+  showManualFallback(html);
 }
 
 // --- init ----------------------------------------------------------------
 
 async function init() {
-  FIELD_IDS.forEach((id) => els[id].addEventListener('input', updatePreview));
+  FIELD_IDS.forEach((id) => {
+    els[id].addEventListener('input', () => {
+      updatePreview();
+      // Clear the error for this field as soon as the user starts typing.
+      els[id].classList.remove('field__input--error');
+      const errEl = document.getElementById(`${id}-err`);
+      if (errEl) errEl.textContent = '';
+    });
+  });
+
   els.copyBtn.addEventListener('click', copySignature);
 
   let registry;
   try {
     registry = await loadRegistry();
-  } catch (err) {
-    els.preview.innerHTML = `<p class="preview-error">Could not load the template list. If you opened this file directly, serve it over a local web server instead (see README).</p>`;
+  } catch (_) {
+    els.preview.innerHTML = `<p class="preview-error">Could not load the template list. If you opened this file directly, serve it over a local web server (see README).</p>`;
     return;
   }
 

@@ -86,6 +86,19 @@ body {
   box-shadow: 0 0 0 3px rgba(232, 115, 28, 0.15);
 }
 
+.field__input--error {
+  border-color: #d93025;
+  box-shadow: 0 0 0 3px rgba(217, 48, 37, 0.12);
+}
+
+.field__error {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #d93025;
+  min-height: 1em;
+}
+
 select.field__input { cursor: pointer; }
 
 .preview__bar {
